@@ -1,7 +1,9 @@
 import axios from "axios";
 
-const BASE = "http://localhost:8081/api/transactions";
-const AUTH = "http://localhost:8081/api/auth";
+const BASE =
+  "https://fintech-dashboard-production-b212.up.railway.app/api/transactions";
+const AUTH =
+  "https://fintech-dashboard-production-b212.up.railway.app/api/auth";
 
 const getToken = () => localStorage.getItem("token");
 
