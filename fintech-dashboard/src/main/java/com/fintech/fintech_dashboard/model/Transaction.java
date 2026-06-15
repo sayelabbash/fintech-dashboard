@@ -1,6 +1,7 @@
 package com.fintech.fintech_dashboard.model;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.*;
@@ -39,6 +40,11 @@ public class Transaction {
 
     @Column(length = 500)
     private String note;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    @JsonIgnore
+    private User user;
 
     public enum TransactionType {
         INCOME, EXPENSE

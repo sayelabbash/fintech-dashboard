@@ -1,55 +1,75 @@
-import { TrendingUp, TrendingDown, Wallet } from "lucide-react";
-
 export default function SummaryCards({ summary }) {
   if (!summary) return null;
 
   const cards = [
-    {
-      label: "Total Income",
-      value: summary.totalIncome,
-      icon: TrendingUp,
-      color: "text-emerald-600",
-      bg: "bg-emerald-50",
-      border: "border-emerald-200",
-    },
-    {
-      label: "Total Expense",
-      value: summary.totalExpense,
-      icon: TrendingDown,
-      color: "text-rose-600",
-      bg: "bg-rose-50",
-      border: "border-rose-200",
-    },
-    {
-      label: "Net Balance",
-      value: summary.netBalance,
-      icon: Wallet,
-      color: summary.netBalance >= 0 ? "text-blue-600" : "text-rose-600",
-      bg: summary.netBalance >= 0 ? "bg-blue-50" : "bg-rose-50",
-      border: summary.netBalance >= 0 ? "border-blue-200" : "border-rose-200",
-    },
+    { label: "Total Income", value: summary.totalIncome, icon: "📈", color: "#10b981", bg: "#ecfdf5", border: "#6ee7b7" },
+    { label: "Total Expense", value: summary.totalExpense, icon: "📉", color: "#ef4444", bg: "#fef2f2", border: "#fca5a5" },
+    { label: "Net Balance", value: summary.netBalance, icon: "💳",
+      color: summary.netBalance >= 0 ? "#6366f1" : "#ef4444",
+      bg: summary.netBalance >= 0 ? "#eef2ff" : "#fef2f2",
+      border: summary.netBalance >= 0 ? "#a5b4fc" : "#fca5a5" },
   ];
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-      {cards.map(({ label, value, icon: Icon, color, bg, border }) => (
+    <div
+      style={{
+        display: "grid",
+        gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))",
+        gap: "16px",
+      }}
+    >
+      {cards.map(({ label, value, icon, color, bg, border }) => (
         <div
           key={label}
-          className={`rounded-2xl border ${border} ${bg} p-5 flex items-center gap-4`}
+          style={{
+            background: bg,
+            borderRadius: "20px",
+            padding: "1.5rem",
+            border: `1.5px solid ${border}`,
+            transition: "transform 0.2s",
+          }}
+          onMouseEnter={(e) =>
+            (e.currentTarget.style.transform = "translateY(-2px)")
+          }
+          onMouseLeave={(e) =>
+            (e.currentTarget.style.transform = "translateY(0)")
+          }
         >
-          <div className="p-3 rounded-xl bg-white shadow-sm">
-            <Icon className={`w-6 h-6 ${color}`} />
-          </div>
-          <div>
-            <p className="text-xs text-gray-500 font-medium uppercase tracking-wide">
-              {label}
-            </p>
-            <p className={`text-2xl font-bold ${color}`}>
-              ₹
-              {Number(value).toLocaleString("en-IN", {
-                minimumFractionDigits: 2,
-              })}
-            </p>
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "flex-start",
+            }}
+          >
+            <div>
+              <p
+                style={{
+                  margin: "0 0 8px",
+                  fontSize: "12px",
+                  fontWeight: "600",
+                  color: "#94a3b8",
+                  textTransform: "uppercase",
+                  letterSpacing: "0.8px",
+                }}
+              >
+                {label}
+              </p>
+              <p
+                style={{
+                  margin: 0,
+                  fontSize: "26px",
+                  fontWeight: "700",
+                  color: color,
+                }}
+              >
+                ₹
+                {Number(value).toLocaleString("en-IN", {
+                  minimumFractionDigits: 2,
+                })}
+              </p>
+            </div>
+            <div style={{ fontSize: "28px", opacity: 0.8 }}>{icon}</div>
           </div>
         </div>
       ))}

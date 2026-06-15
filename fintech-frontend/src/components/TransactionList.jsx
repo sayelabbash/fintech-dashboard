@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { deleteTransaction } from "../api/transactions";
 import toast from "react-hot-toast";
-import { Trash2, Filter } from "lucide-react";
 
 const CATEGORIES = [
   "",
@@ -26,7 +25,7 @@ export default function TransactionList({ transactions, onRefresh }) {
   const handle = (e) =>
     setFilters({ ...filters, [e.target.name]: e.target.value });
 
-  const applyFilter = async () => {
+  const applyFilter = () => {
     const params = {};
     if (filters.category) params.category = filters.category;
     if (filters.startDate) params.startDate = filters.startDate;
@@ -50,20 +49,103 @@ export default function TransactionList({ transactions, onRefresh }) {
     }
   };
 
-  const inputCls =
-    "rounded-xl border border-gray-200 bg-gray-50 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-300";
+  const inputStyle = {
+    padding: "9px 12px",
+    border: "1.5px solid #e5e7eb",
+    borderRadius: "10px",
+    fontSize: "13px",
+    outline: "none",
+    fontFamily: "Inter, sans-serif",
+    background: "#f9fafb",
+    color: "#374151",
+  };
+
+  const categoryIcons = {
+    Salary: "💼",
+    Food: "🍕",
+    Transport: "🚗",
+    Rent: "🏠",
+    Shopping: "🛍️",
+    Health: "❤️",
+    Entertainment: "🎮",
+    Education: "📚",
+    Other: "📌",
+  };
 
   return (
-    <div className="rounded-2xl border border-gray-100 bg-white shadow-sm p-6">
-      <h2 className="text-base font-bold text-gray-800 mb-4 flex items-center gap-2">
-        <Filter className="w-5 h-5 text-indigo-500" /> Transactions
-      </h2>
-      <div className="flex flex-wrap gap-2 mb-4">
+    <div
+      style={{
+        background: "white",
+        borderRadius: "20px",
+        padding: "1.5rem",
+        border: "1px solid #f1f5f9",
+        boxShadow: "0 4px 20px rgba(0,0,0,0.04)",
+      }}
+    >
+      <div
+        style={{
+          display: "flex",
+          alignItems: "center",
+          gap: "10px",
+          marginBottom: "1.25rem",
+        }}
+      >
+        <div
+          style={{
+            width: "36px",
+            height: "36px",
+            background: "#eef2ff",
+            borderRadius: "10px",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            fontSize: "18px",
+          }}
+        >
+          🔍
+        </div>
+        <h2
+          style={{
+            margin: 0,
+            fontSize: "16px",
+            fontWeight: "700",
+            color: "#1e293b",
+          }}
+        >
+          Transactions
+        </h2>
+        <span
+          style={{
+            marginLeft: "auto",
+            background: "#f1f5f9",
+            color: "#64748b",
+            padding: "4px 10px",
+            borderRadius: "99px",
+            fontSize: "12px",
+            fontWeight: "600",
+          }}
+        >
+          {transactions.length} records
+        </span>
+      </div>
+
+      {/* Filters */}
+      <div
+        style={{
+          display: "flex",
+          flexWrap: "wrap",
+          gap: "8px",
+          marginBottom: "1rem",
+          padding: "12px",
+          background: "#f8fafc",
+          borderRadius: "12px",
+        }}
+      >
         <select
           name="category"
           value={filters.category}
           onChange={handle}
-          className={inputCls}
+          style={inputStyle}
         >
           {CATEGORIES.map((c) => (
             <option key={c} value={c}>
@@ -76,72 +158,175 @@ export default function TransactionList({ transactions, onRefresh }) {
           type="date"
           value={filters.startDate}
           onChange={handle}
-          className={inputCls}
+          style={inputStyle}
         />
         <input
           name="endDate"
           type="date"
           value={filters.endDate}
           onChange={handle}
-          className={inputCls}
+          style={inputStyle}
         />
         <button
           onClick={applyFilter}
-          className="bg-indigo-600 text-white text-sm px-4 py-2 rounded-xl hover:bg-indigo-700 transition"
+          style={{
+            padding: "9px 18px",
+            background: "#6366f1",
+            color: "white",
+            border: "none",
+            borderRadius: "10px",
+            fontSize: "13px",
+            fontWeight: "600",
+            cursor: "pointer",
+          }}
         >
           Apply
         </button>
         <button
           onClick={clearFilter}
-          className="bg-gray-100 text-gray-600 text-sm px-4 py-2 rounded-xl hover:bg-gray-200 transition"
+          style={{
+            padding: "9px 18px",
+            background: "white",
+            color: "#64748b",
+            border: "1.5px solid #e5e7eb",
+            borderRadius: "10px",
+            fontSize: "13px",
+            fontWeight: "600",
+            cursor: "pointer",
+          }}
         >
           Clear
         </button>
       </div>
+
+      {/* List */}
       {transactions.length === 0 ? (
-        <p className="text-center text-gray-400 py-8 text-sm">
-          No transactions found. Add one above!
-        </p>
+        <div style={{ textAlign: "center", padding: "3rem", color: "#94a3b8" }}>
+          <div style={{ fontSize: "48px", marginBottom: "12px" }}>📭</div>
+          <p style={{ margin: 0, fontSize: "14px" }}>
+            No transactions yet. Add your first one!
+          </p>
+        </div>
       ) : (
-        <div className="space-y-2 max-h-96 overflow-y-auto pr-1">
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            gap: "8px",
+            maxHeight: "420px",
+            overflowY: "auto",
+            paddingRight: "4px",
+          }}
+        >
           {transactions.map((t) => (
             <div
               key={t.id}
-              className="flex items-center justify-between rounded-xl border border-gray-100 bg-gray-50 px-4 py-3 hover:bg-gray-100 transition"
+              style={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+                padding: "14px 16px",
+                borderRadius: "14px",
+                border: "1.5px solid #f1f5f9",
+                background: "#fafbff",
+                transition: "all 0.15s",
+                cursor: "default",
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.background = "#f8faff";
+                e.currentTarget.style.borderColor = "#e0e7ff";
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.background = "#fafbff";
+                e.currentTarget.style.borderColor = "#f1f5f9";
+              }}
             >
-              <div className="flex items-center gap-3">
-                <span
-                  className={`text-xs font-bold px-2 py-1 rounded-lg ${
-                    t.type === "INCOME"
-                      ? "bg-emerald-100 text-emerald-700"
-                      : "bg-rose-100 text-rose-700"
-                  }`}
+              <div
+                style={{ display: "flex", alignItems: "center", gap: "12px" }}
+              >
+                <div
+                  style={{
+                    width: "42px",
+                    height: "42px",
+                    borderRadius: "12px",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    fontSize: "20px",
+                    background: t.type === "INCOME" ? "#ecfdf5" : "#fef2f2",
+                  }}
                 >
-                  {t.type}
-                </span>
+                  {categoryIcons[t.category] || "📌"}
+                </div>
                 <div>
-                  <p className="text-sm font-semibold text-gray-800">
+                  <p
+                    style={{
+                      margin: 0,
+                      fontSize: "14px",
+                      fontWeight: "600",
+                      color: "#1e293b",
+                    }}
+                  >
                     {t.category}
                   </p>
-                  <p className="text-xs text-gray-400">
-                    {t.date} {t.note && `· ${t.note}`}
+                  <p style={{ margin: 0, fontSize: "12px", color: "#94a3b8" }}>
+                    {t.date}
+                    {t.note && ` · ${t.note}`}
                   </p>
                 </div>
               </div>
-              <div className="flex items-center gap-3">
-                <span
-                  className={`font-bold text-sm ${
-                    t.type === "INCOME" ? "text-emerald-600" : "text-rose-600"
-                  }`}
-                >
-                  {t.type === "INCOME" ? "+" : "-"}₹
-                  {Number(t.amount).toLocaleString("en-IN")}
-                </span>
+              <div
+                style={{ display: "flex", alignItems: "center", gap: "12px" }}
+              >
+                <div style={{ textAlign: "right" }}>
+                  <p
+                    style={{
+                      margin: 0,
+                      fontSize: "15px",
+                      fontWeight: "700",
+                      color: t.type === "INCOME" ? "#10b981" : "#ef4444",
+                    }}
+                  >
+                    {t.type === "INCOME" ? "+" : "-"}₹
+                    {Number(t.amount).toLocaleString("en-IN")}
+                  </p>
+                  <span
+                    style={{
+                      fontSize: "11px",
+                      fontWeight: "600",
+                      padding: "2px 8px",
+                      borderRadius: "99px",
+                      background: t.type === "INCOME" ? "#ecfdf5" : "#fef2f2",
+                      color: t.type === "INCOME" ? "#10b981" : "#ef4444",
+                    }}
+                  >
+                    {t.type}
+                  </span>
+                </div>
                 <button
                   onClick={() => handleDelete(t.id)}
-                  className="text-gray-300 hover:text-rose-500 transition"
+                  style={{
+                    background: "#fef2f2",
+                    border: "none",
+                    borderRadius: "10px",
+                    width: "34px",
+                    height: "34px",
+                    cursor: "pointer",
+                    fontSize: "14px",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    color: "#ef4444",
+                    transition: "all 0.15s",
+                  }}
+                  onMouseEnter={(e) =>
+                    (e.currentTarget.style.background = "#fee2e2")
+                  }
+                  onMouseLeave={(e) =>
+                    (e.currentTarget.style.background = "#fef2f2")
+                  }
                 >
-                  <Trash2 className="w-4 h-4" />
+                  🗑️
                 </button>
               </div>
             </div>

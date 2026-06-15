@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { addTransaction } from "../api/transactions";
 import toast from "react-hot-toast";
-import { PlusCircle } from "lucide-react";
 
 const CATEGORIES = [
   "Salary",
@@ -49,28 +48,88 @@ export default function AddTransactionForm({ onAdded }) {
     }
   };
 
-  const inputCls =
-    "w-full rounded-xl border border-gray-200 bg-gray-50 px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-300";
+  const inputStyle = {
+    width: "100%",
+    padding: "11px 14px",
+    border: "1.5px solid #e5e7eb",
+    borderRadius: "12px",
+    fontSize: "14px",
+    outline: "none",
+    boxSizing: "border-box",
+    fontFamily: "Inter, sans-serif",
+    background: "#f9fafb",
+    transition: "all 0.2s",
+    color: "#1f2937",
+  };
 
   return (
-    <div className="rounded-2xl border border-gray-100 bg-white shadow-sm p-6">
-      <h2 className="text-base font-bold text-gray-800 mb-4 flex items-center gap-2">
-        <PlusCircle className="w-5 h-5 text-indigo-500" /> Add Transaction
-      </h2>
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+    <div
+      style={{
+        background: "white",
+        borderRadius: "20px",
+        padding: "1.5rem",
+        border: "1px solid #f1f5f9",
+        boxShadow: "0 4px 20px rgba(0,0,0,0.04)",
+      }}
+    >
+      <div
+        style={{
+          display: "flex",
+          alignItems: "center",
+          gap: "10px",
+          marginBottom: "1.25rem",
+        }}
+      >
+        <div
+          style={{
+            width: "36px",
+            height: "36px",
+            background: "#eef2ff",
+            borderRadius: "10px",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            fontSize: "18px",
+          }}
+        >
+          ➕
+        </div>
+        <h2
+          style={{
+            margin: 0,
+            fontSize: "16px",
+            fontWeight: "700",
+            color: "#1e293b",
+          }}
+        >
+          Add Transaction
+        </h2>
+      </div>
+
+      <div
+        style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "10px" }}
+      >
         <input
           name="amount"
           type="number"
           placeholder="Amount (₹)"
           value={form.amount}
           onChange={handle}
-          className={inputCls}
+          style={inputStyle}
+          onFocus={(e) => {
+            e.target.style.borderColor = "#6366f1";
+            e.target.style.background = "white";
+          }}
+          onBlur={(e) => {
+            e.target.style.borderColor = "#e5e7eb";
+            e.target.style.background = "#f9fafb";
+          }}
         />
         <select
           name="category"
           value={form.category}
           onChange={handle}
-          className={inputCls}
+          style={inputStyle}
         >
           {CATEGORIES.map((c) => (
             <option key={c}>{c}</option>
@@ -80,17 +139,29 @@ export default function AddTransactionForm({ onAdded }) {
           name="type"
           value={form.type}
           onChange={handle}
-          className={inputCls}
+          style={{
+            ...inputStyle,
+            color: form.type === "INCOME" ? "#10b981" : "#ef4444",
+            fontWeight: "600",
+          }}
         >
-          <option value="INCOME">Income</option>
-          <option value="EXPENSE">Expense</option>
+          <option value="INCOME">📈 Income</option>
+          <option value="EXPENSE">📉 Expense</option>
         </select>
         <input
           name="date"
           type="date"
           value={form.date}
           onChange={handle}
-          className={inputCls}
+          style={inputStyle}
+          onFocus={(e) => {
+            e.target.style.borderColor = "#6366f1";
+            e.target.style.background = "white";
+          }}
+          onBlur={(e) => {
+            e.target.style.borderColor = "#e5e7eb";
+            e.target.style.background = "#f9fafb";
+          }}
         />
         <input
           name="note"
@@ -98,13 +169,36 @@ export default function AddTransactionForm({ onAdded }) {
           placeholder="Note (optional)"
           value={form.note}
           onChange={handle}
-          className={`${inputCls} sm:col-span-2`}
+          style={{ ...inputStyle, gridColumn: "1 / -1" }}
+          onFocus={(e) => {
+            e.target.style.borderColor = "#6366f1";
+            e.target.style.background = "white";
+          }}
+          onBlur={(e) => {
+            e.target.style.borderColor = "#e5e7eb";
+            e.target.style.background = "#f9fafb";
+          }}
         />
       </div>
+
       <button
         onClick={submit}
         disabled={loading}
-        className="mt-4 w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-2.5 rounded-xl transition disabled:opacity-60"
+        style={{
+          width: "100%",
+          marginTop: "14px",
+          padding: "13px",
+          background: loading
+            ? "#a5b4fc"
+            : "linear-gradient(135deg, #667eea, #764ba2)",
+          color: "white",
+          border: "none",
+          borderRadius: "12px",
+          fontSize: "15px",
+          fontWeight: "700",
+          cursor: loading ? "not-allowed" : "pointer",
+          transition: "all 0.2s",
+        }}
       >
         {loading ? "Saving..." : "Add Transaction"}
       </button>
